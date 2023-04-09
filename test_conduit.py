@@ -66,7 +66,7 @@ class TestConduit(object):
         ok_btn.click()
         WebDriverWait(self.browser, 3).until(EC.invisibility_of_element(modal))
 
-    def test_login(self):
+    def login(self):
         login_link = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
         login_link.click()
 
@@ -79,6 +79,9 @@ class TestConduit(object):
         sign_in_btn.click()
 
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
+    def test_login(self):
+        self.login()
 
         username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
         assert username_nav.is_displayed()
