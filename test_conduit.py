@@ -8,6 +8,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 import time
 import os
 
+user_name = "test42"
+user_email = "test42@freemail.hu"
+user_password = "1234Abc!"
 
 class TestConduit(object):
 
@@ -47,9 +50,9 @@ class TestConduit(object):
         password_input = self.browser.find_element(By.XPATH, '//input[@type="password"]')
         sign_up_btn = self.browser.find_element(By.XPATH, '//button[contains(text(), "Sign up")]')
 
-        username_input.send_keys('test42')
-        email_input.send_keys('test42@freemail.hu')
-        password_input.send_keys('1234Abc!')
+        username_input.send_keys(user_name)
+        email_input.send_keys(user_email)
+        password_input.send_keys(user_password)
 
         sign_up_btn.click()
 
@@ -62,3 +65,20 @@ class TestConduit(object):
         ok_btn = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal button.swal-button--confirm')
         ok_btn.click()
         WebDriverWait(self.browser, 3).until(EC.invisibility_of_element(modal))
+
+    def test_login(self):
+        login_link = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
+        login_link.click()
+
+        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
+        password_input = self.browser.find_element(By.XPATH, '//input[@type="password"]')
+        sign_in_btn = self.browser.find_element(By.XPATH, '//button[contains(text(), "Sign in")]')
+
+        email_input.send_keys(user_email)
+        password_input.send_keys(user_password)
+        sign_in_btn.click()
+
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
+        username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
+        assert username_nav.is_displayed()
