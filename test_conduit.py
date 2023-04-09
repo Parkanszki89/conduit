@@ -58,8 +58,7 @@ class TestConduit(object):
         modal_icon = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal > .swal-icon--success')
         assert modal_icon.is_displayed()
 
+        modal = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal')
         ok_btn = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal button.swal-button--confirm')
         ok_btn.click()
-
-        modal = self.browser.find_elements(By.CSS_SELECTOR, '.swal-modal')
-        assert len(modal) == 0
+        WebDriverWait(self.browser, 3).until(EC.invisibility_of_element(modal))
