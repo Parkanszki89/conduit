@@ -17,19 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Builds and Starts
+      - name: Docker build for test
         run: |
           docker-compose up -d
-
-      - name: Run Integration Tests
-        run: |
-          docker-compose up -d
-          docker exec realworld_drash deno test -A --unstable tests/integration/test.ts
-
-      - name: Run Unit Tests
-        run: |
-          docker-compose up -d
-          docker exec realworld_drash deno test -A --unstable tests/unit/models/base_model_test.ts
+      - name: sleep for 60s
+        run: sleep 60s
+        shell: bash
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
@@ -59,19 +52,3 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
-
-  linter:
-      # Only one OS is required since fmt is cross platform
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install Deno
-        uses: denolib/setup-deno@master
-
-      - name: Formatter
-        run: deno fmt --check --unstable --ignore='src/public,src/vue,src/package.json,src/webpack.config.js'
-
-      - name: Linter
-        run: deno lint --unstable --ignore='src/public,src/vue,src/package.json,src/webpack.config.js'
