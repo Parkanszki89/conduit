@@ -39,8 +39,6 @@ class TestConduit(object):
         assert len(cookie_container) == 0
 
     def test_register(self):
-        if not self.is_ci:
-            return
         register_link = self.browser.find_element(By.XPATH, '//a[@href="#/register"]')
         register_link.click()
 
@@ -56,3 +54,12 @@ class TestConduit(object):
         sign_up_btn.click()
 
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
+        modal_icon = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal > .swal-icon--success')
+        assert modal_icon.is_displayed()
+
+        ok_btn = self.browser.find_element(By.CSS_SELECTOR, '.swal-modal button.swal-button--confirm')
+        ok_btn.click()
+
+        modal = self.browser.find_elements(By.CSS_SELECTOR, '.swal-modal')
+        assert len(modal) == 0
