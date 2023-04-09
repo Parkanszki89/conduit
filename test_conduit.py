@@ -27,6 +27,3 @@ class TestConduit(object):
         time.sleep(1)
         cookie_container = self.browser.find_elements(By.CSS_SELECTOR, 'footer > .container > #cookie-policy-panel')
         assert len(cookie_container) == 0
-
-    def test_register(self):
-
