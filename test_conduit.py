@@ -85,3 +85,25 @@ class TestConduit(object):
 
         username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
         assert username_nav.is_displayed()
+    def test_new_article(self):
+        self.login()
+        new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
+        new_article_link.click()
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/editor'))
+        article_title = self.browser.find_element(By.XPATH, '//input[@placeholder="Article Title"]')
+        about = self.browser.find_element(By.XPATH, '//input[@placeholder="What\'s this article about?"]')
+        article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
+        tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
+        publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+
+        article_title.send_keys('test')
+        about.send_keys('testing')
+        article_text.send_keys('this is a test article')
+        tag.send_keys('test')
+        article_text.click()
+        tag.send_keys('article')
+        publish_btn.click()
+
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/articles/test'))
+        actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
+        assert actual_article_title.text == 'test'
