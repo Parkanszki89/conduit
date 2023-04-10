@@ -120,9 +120,11 @@ class TestConduit(object):
         username_nav.click()
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/@test42/'))
         article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
+        WebDriverWait(self.browser, 3).until(EC.visibility_of(article_link))
         article_link.click()
         WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
         delete_btn = self.browser.find_element(By.CSS_SELECTOR, '.btn-outline-danger')
+        WebDriverWait(self.browser, 3).until(EC.visibility_of(delete_btn))
         delete_btn.click()
         WebDriverWait(self.browser, 3).until(
             EC.presence_of_element_located((By.XPATH, '//div[text()="Deleted the article. Going home..."]')))
