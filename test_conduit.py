@@ -107,3 +107,24 @@ class TestConduit(object):
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/articles/test'))
         actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
         assert actual_article_title.text == 'test'
+        actual_author = self.browser.find_element(By.CSS_SELECTOR,'.article-meta .author')
+        assert actual_author.text == user_name
+        actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+        assert actual_article_content.text == 'this is a test article'
+        actual_tags = self.browser.find_element(By.CSS_SELECTOR, '.article-content .tag-list')
+        assert actual_tags.text == 'testarticle'
+
+    def test_delete_article(self):
+        self.login()
+        username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
+        username_nav.click()
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/@test42/'))
+        article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
+        article_link.click()
+        WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
+        delete_btn = self.browser.find_element(By.CSS_SELECTOR, '.btn-outline-danger')
+        delete_btn.click()
+        WebDriverWait(self.browser, 3).until(
+            EC.presence_of_element_located((By.XPATH, '//div[text()="Deleted the article. Going home..."]')))
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
