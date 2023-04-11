@@ -124,7 +124,7 @@ class TestConduit(object):
         article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
         article_link.click()
         WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
-        edit_btn = self.browser.find_element(By.XPATH, '//button[contains(text(), "Edit Article")]')
+        edit_btn = self.browser.find_element(By.XPATH, '//*[contains(text(), "Edit Article")]')
         WebDriverWait(self.browser, 3).until(EC.visibility_of(edit_btn))
         edit_btn.click()
         WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
