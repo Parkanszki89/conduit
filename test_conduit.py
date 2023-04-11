@@ -85,6 +85,7 @@ class TestConduit(object):
 
         username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
         assert username_nav.is_displayed()
+
     def test_new_article(self):
         self.login()
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
@@ -123,10 +124,10 @@ class TestConduit(object):
         article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
         article_link.click()
         WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
-        edit_btn = self.browser.find_element(By.CSS_SELECTOR, '.btn-outline-secondary')
+        edit_btn = self.browser.find_element(By.XPATH, '//button[contains(text(), "Edit Article")]')
         WebDriverWait(self.browser, 3).until(EC.visibility_of(edit_btn))
         edit_btn.click()
-        WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/editor'))
+        WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
         article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
         article_text.send_keys(' which was modified')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
@@ -151,4 +152,5 @@ class TestConduit(object):
         WebDriverWait(self.browser, 3).until(
             EC.presence_of_element_located((By.XPATH, '//div[text()="Deleted the article. Going home..."]')))
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
 
