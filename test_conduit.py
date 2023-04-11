@@ -114,6 +114,28 @@ class TestConduit(object):
         actual_tags = self.browser.find_element(By.CSS_SELECTOR, '.article-content .tag-list')
         assert actual_tags.text == 'testarticle'
 
+    def test_edit_article(self):
+        self.login()
+        username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
+        username_nav.click()
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/@test42/'))
+        article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
+        WebDriverWait(self.browser, 3).until(EC.visibility_of(article_link))
+        article_link.click()
+        WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
+        edit_btn = self.browser.find_element(By.CSS_SELECTOR, '.btn-outline-secondary')
+        WebDriverWait(self.browser, 3).until(EC.visibility_of(edit_btn))
+        edit_btn.click()
+        WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/editor'))
+        article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
+        article_text.send_keys(' which was modified')
+        publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+        publish_btn.click()
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/articles/test'))
+
+        modified_article_text = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+        assert modified_article_text.text == 'this is a test article which was modified'
+
     def test_delete_article(self):
         self.login()
         username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
