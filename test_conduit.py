@@ -126,27 +126,22 @@ class TestConduit(object):
         actual_tags = self.browser.find_element(By.CSS_SELECTOR, '.article-content .tag-list')
         assert actual_tags.text == 'testarticle'
 
-    # def test_edit_article(self):
-    #     self.create_article()
-    #     # username_nav = self.browser.find_element(By.XPATH, '//li/a[contains(text(), "' + user_name + '")]')
-    #     # username_nav.click()
-    #     # WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/@' + user_name + '/'))
-    #     # WebDriverWait(self.browser, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.preview-link')))
-    #     # article_link = self.browser.find_element(By.CSS_SELECTOR, '.preview-link')
-    #     # article_link.click()
-    #     WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
-    #     edit_btn = self.browser.find_element(By.XPATH, '//*[contains(text(), "Edit Article"]')
-    #     WebDriverWait(self.browser, 5).until(EC.visibility_of(edit_btn))
-    #     edit_btn.click()
-    #     WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
-    #     article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
-    #     article_text.send_keys(' which was modified')
-    #     publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
-    #     publish_btn.click()
-    #     WebDriverWait(self.browser, 5).until(EC.url_to_be('http://localhost:1667/#/articles/test'))
-    #
-    #     modified_article_text = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
-    #     assert modified_article_text.text == 'this is a test article which was modified'
+    def test_edit_article(self):
+        self.create_article('test-edit', 'test-edit about', 'this is a test article', ['edit'])
+        WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//*[contains(text(), "Edit Article"]')))
+
+        edit_btn = self.browser.find_element(By.XPATH, '//*[contains(text(), "Edit Article"]')
+        edit_btn.click()
+        WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
+        article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
+        article_text.send_keys(' which was modified')
+        publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+        publish_btn.click()
+        WebDriverWait(self.browser, 5).until(EC.url_to_be('http://localhost:1667/#/articles/test'))
+
+        modified_article_text = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+        assert modified_article_text.text == 'this is a test article which was modified'
 
     def test_delete_article(self):
         self.create_article('test delete', 'about delete', 'this is an article that must be deleted', ['delete', 'me'])
