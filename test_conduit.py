@@ -1,4 +1,5 @@
 """ Importok: """
+import json
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -184,3 +185,28 @@ class TestConduit(object):
             actual_page = WebDriverWait(self.browser, 5).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'li.page-item.active')))
             assert actual_page.text == str(i + 1)
+
+    def test_input_from_file(self):
+        self.login()
+        with open('input_data.json', 'r') as read_file:
+            data = json.load(read_file)
+            for article in data:
+                title = article['title']
+                about = article['about']
+                text = article['text']
+                tags = article['tags']
+                self.create_article(title, about, text, tags)
+                WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, '//h1[contains(text(), "' + title + '")]'))
+                )
+                actual_author = self.browser.find_element(By.CSS_SELECTOR, '.article-meta .author')
+                assert actual_author.text == user_name
+                actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+                assert actual_article_content.text == text
+
+
+
+
+
+
+
