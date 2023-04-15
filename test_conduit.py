@@ -171,3 +171,16 @@ class TestConduit(object):
 
         previews = self.browser.find_elements(By.CSS_SELECTOR, 'div.article-preview')
         assert len(previews) == count
+
+    def test_pages(self):
+        self.login()
+        page_links = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'a.page-link'))
+        )
+        assert len(page_links) == 2
+
+        for i, link in enumerate(page_links):
+            link.click()
+            actual_page = WebDriverWait(self.browser, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, 'li.page-item.active')))
+            assert actual_page.text == str(i + 1)
