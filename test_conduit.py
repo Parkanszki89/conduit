@@ -160,7 +160,6 @@ class TestConduit(object):
         WebDriverWait(self.browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.ion-heart')))
         favorite_links = self.browser.find_elements(By.CSS_SELECTOR, '.ion-heart')
         count = 0
-        print('number of favorite links: ' + str(len(favorite_links)))
         for i, link in enumerate(favorite_links):
             if i % 2 == 0:
                 link.click()
