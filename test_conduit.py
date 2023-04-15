@@ -137,7 +137,8 @@ class TestConduit(object):
         viewer_url = self.browser.current_url
         edit_btn.click()
         WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
-        article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
+        article_text = self.browser.find_element(By.XPATH,
+                                                 '//textarea[@placeholder="Write your article (in markdown)"]')
         article_text.send_keys(' which was modified')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
         publish_btn.click()
@@ -204,9 +205,12 @@ class TestConduit(object):
                 actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
                 assert actual_article_content.text == text
 
-
-
-
-
-
-
+    def test_logout(self):
+        self.login()
+        logout_btn = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.ion-android-exit'))
+        )
+        logout_btn.click()
+        WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//a[@href="#/login"]'))
+        )
