@@ -95,7 +95,6 @@ class TestConduit(object):
         assert username_nav.is_displayed()
 
     def create_article(self, title, about, text, tags):
-        self.login()
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
         new_article_link.click()
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/editor'))
@@ -116,6 +115,7 @@ class TestConduit(object):
         WebDriverWait(self.browser, 3).until(EC.url_matches('http://localhost:1667/#/articles'))
 
     def test_new_article(self):
+        self.login()
         self.create_article('test1', 'about test', 'this is a test article', ['test', 'article'])
         actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
         assert actual_article_title.text == 'test1'
@@ -127,6 +127,7 @@ class TestConduit(object):
         assert actual_tags.text == 'testarticle'
 
     def test_edit_article(self):
+        self.login()
         self.create_article('test-edit', 'test-edit about', 'this is a test article', ['edit'])
         WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.ion-edit')))
@@ -145,6 +146,7 @@ class TestConduit(object):
         assert modified_article_text.text == 'this is a test article which was modified'
 
     def test_delete_article(self):
+        self.login()
         self.create_article('test delete', 'about delete', 'this is an article that must be deleted', ['delete', 'me'])
         delete_btn = self.browser.find_element(By.CSS_SELECTOR, '.btn-outline-danger')
         WebDriverWait(self.browser, 3).until(EC.visibility_of(delete_btn))
@@ -152,3 +154,6 @@ class TestConduit(object):
         WebDriverWait(self.browser, 3).until(
             EC.presence_of_element_located((By.XPATH, '//div[text()="Deleted the article. Going home..."]')))
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/'))
+
+    def test_favorite(self):
+        self.login()
