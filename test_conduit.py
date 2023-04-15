@@ -132,13 +132,14 @@ class TestConduit(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, '.ion-edit')))
 
         edit_btn = self.browser.find_element(By.CSS_SELECTOR, '.ion-edit')
+        viewer_url = self.browser.current_url
         edit_btn.click()
         WebDriverWait(self.browser, 5).until(EC.url_matches('http://localhost:1667/#/editor'))
         article_text = self.browser.find_element(By.XPATH, '//textarea[@placeholder="Write your article (in markdown)"]')
         article_text.send_keys(' which was modified')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
         publish_btn.click()
-        WebDriverWait(self.browser, 5).until(EC.url_to_be('http://localhost:1667/#/articles/test-edit'))
+        WebDriverWait(self.browser, 5).until(EC.url_to_be(viewer_url))
 
         modified_article_text = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
         assert modified_article_text.text == 'this is a test article which was modified'
