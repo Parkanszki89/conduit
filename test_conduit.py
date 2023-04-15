@@ -170,7 +170,9 @@ class TestConduit(object):
 
         self.browser.get('http://localhost:1667/#/@' + user_name + '/favorites')
         time.sleep(10)
-
+        WebDriverWait(self.browser, 10).until(
+            EC.presence_of_all_elements_located((By.XPATH, '//span[@class="counter" and contains(text(), "1")]'))
+        )
         previews = self.browser.find_elements(By.CSS_SELECTOR, 'div.article-preview')
         assert len(previews) == count
 
