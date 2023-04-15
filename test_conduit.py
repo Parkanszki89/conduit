@@ -162,6 +162,7 @@ class TestConduit(object):
         for i, link in enumerate(favorite_links):
             if i % 2 == 0:
                 link.click()
+                time.sleep(1)
                 count += 1
 
         self.browser.get('http://localhost:1667/#/@' + user_name + '/favorites')
