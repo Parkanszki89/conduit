@@ -159,6 +159,7 @@ class TestConduit(object):
         self.login()
         favorite_links = self.browser.find_elements(By.CSS_SELECTOR, '.ion-heart')
         count = 0
+        print('number of favorite links: ' + len(favorite_links))
         for i, link in enumerate(favorite_links):
             if i % 2 == 0:
                 link.click()
@@ -166,7 +167,7 @@ class TestConduit(object):
                 count += 1
 
         self.browser.get('http://localhost:1667/#/@' + user_name + '/favorites')
-        time.sleep(3)
+        time.sleep(10)
 
         previews = self.browser.find_elements(By.CSS_SELECTOR, 'div.article-preview')
         assert len(previews) == count
