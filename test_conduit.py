@@ -207,6 +207,26 @@ class TestConduit(object):
                 actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
                 assert actual_article_content.text == text
 
+    def test_save_article_to_file(self):
+        self.login()
+        self.create_article('save', 'test saving', 'this is an article which has to be saved', ['save', 'me'])
+
+        actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
+        actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+
+        data = {
+            'title': actual_article_title.text,
+            'content': actual_article_content.text
+        }
+        with open('output.json', 'w') as file:
+            json.dump(data, file)
+
+        with open('output.json', 'r') as file:
+            data = json.load(file)
+            assert data['title'] == actual_article_title.text
+            assert data['content'] == actual_article_content.text
+
+
     def test_logout(self):
         self.login()
         logout_btn = WebDriverWait(self.browser, 10).until(
