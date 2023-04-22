@@ -238,7 +238,7 @@ class TestConduit(object):
             assert data['title'] == actual_article_title.text
             assert data['content'] == actual_article_content.text
 
-    # # TC11: bejelentkezés helyes adatokkal
+    # # TC11: Kijelentkezés
     def test_logout(self):
         self.login()
         logout_btn = WebDriverWait(self.browser, 10).until(
